@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Net Salary Calculator</title>
+    <link
+    href=
+"https://fonts.googleapis.com/css?family=Righteous&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    *{
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ text-transform: capitalize;
+ font-family: monospace;
+} 
+body{
+ display: grid;
+ place-content: center;
+ min-height: 100vh;
+ background: white;
+font-size: 12px;
+}
+.container{
+    background-color: aqua;
+    width: 500px;
+    height: 250px;
+    box-shadow: 0px 10px 10px 0px #000; 
+}
+   </style>
+	<script>
+		function calculate() {
+			// get input values
+			var basicSalary = parseFloat(document.getElementById("basic-salary").value);
+			var benefits = parseFloat(document.getElementById("benefits").value);
+
+			// calculate gross salary
+			var grossSalary = basicSalary + benefits;
+
+			// calculate payee (tax)
+			var tax = 0;
+			if (grossSalary > 28833) {
+				tax = (grossSalary - 28833) * 0.3 + 4683;
+			} else if (grossSalary > 11667) {
+				tax = (grossSalary - 11667) * 0.25 + 2083;
+			} else if (grossSalary > 5833) {
+				tax = (grossSalary - 5833) * 0.2;
+			}
+
+			// calculate NHIF deductions
+			var nhif = 0;
+			if (grossSalary >= 10000) {
+				nhif = 170;
+			} else if (grossSalary >= 8000) {
+				nhif = 150;
+			} else if (grossSalary >= 6000) {
+				nhif = 120;
+			} else if (grossSalary >= 4000) {
+				nhif = 90;
+			} else if (grossSalary >= 1500) {
+				nhif = 60;
+			}
+
+			// calculate NSSF deductions
+			var nssf = Math.min(grossSalary * 0.06, 200);
+
+			// calculate net salary
+			var netSalary = grossSalary - tax - nhif - nssf;
+
+			// display results
+			document.getElementById("gross-salary").innerHTML = "KES " + grossSalary.toFixed(2);
+			document.getElementById("tax").innerHTML = "KES " + tax.toFixed(2);
+			document.getElementById("nhif").innerHTML = "KES " + nhif.toFixed(2);
+			document.getElementById("nssf").innerHTML = "KES " + nssf.toFixed(2);
+			document.getElementById("net-salary").innerHTML = "KES " + netSalary.toFixed(2);
+		}
+	</script>
+</head>
+<body>
+    <div class="container">
+	<h1>Net Salary Calculator</h1>
+	<form>
+		<label for="basic-salary">Basic Salary:</label>
+		<input type="number" id="basic-salary" name="basic-salary" required><br><br>
+
+		<label for="benefits">Benefits:</label>
+		<input type="number" id="benefits" name="benefits"><br><br>
+
+		<input type="button" value="Calculate" onclick="calculate()"><br><br>
+	</form>
+
+	<h2>Results</h2>
+	<p>Gross Salary: <span id="gross-salary"></span></p>
+	<p>Tax (PAYE): <span id="tax"></span></p>
+	<p>NHIF Deductions: <span id="nhif"></span></p>
+	<p>NSSF Deductions: <span id="nssf"></span></p>
+	<p>Net Salary: <span id="net-salary"></span></p>
+</div>
+</body>
+</html>
